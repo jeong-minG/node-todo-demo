@@ -13,7 +13,7 @@ taskController.createTask = async (req, res) => {
 
 taskController.getTask = async (req, res) => {
     try {
-        const taskList = await Task.find({});
+        const taskList = await Task.find({}).select('-__v');
         res.status(200).json({ status: 'ok', data: taskList });
     } catch (err) {
         res.status(400).json({ status: 'fail', error: err });
@@ -22,11 +22,7 @@ taskController.getTask = async (req, res) => {
 
 taskController.updateTask = async (req, res) => {
     try {
-        const updatedTask = await Task.findByIdAndUpdate(
-            req.params.id,
-            req.body,
-            { new: true, runValidators: true } //req.body에 스키마 검증을 적용
-        );
+        const updatedTask = await Task.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
         res.status(200).json({ status: 'success', data: updatedTask });
     } catch (error) {
         res.status(400).json({ status: 'fail', error });
